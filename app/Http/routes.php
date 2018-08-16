@@ -11,6 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'IndexController@Index');
+Route::post('infolist', 'IndexController@infolist');
+
+
+
+Route::auth();
+
+Route::get('/home', 'HomeController@index');

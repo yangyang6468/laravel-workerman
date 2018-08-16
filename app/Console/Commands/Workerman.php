@@ -88,17 +88,19 @@ class Workerman extends Command
                 case 'chat' :
                     //格式['type'=>'chat','from_uid'=>,'to_uid' =>,'msg'=>,'msgtype'=>,'flag'=>]
                     //添加数据到数据库
-                    $insertData["create_time"] = $insertData["update_time"] = time();
-                    $insertData["from_userid"] = $data["from_uid"];
-                    $insertData["to_userid"] = $data["to_uid"];
-                    $insertData["msg"] = $data["msg"];
-                    $insertData["msg_type"] = $data["msgtype"];
-                    $insertData["flag"] = $data["flag"];
-                    $insert_id = $db->insert('cmf_chat')->cols($insertData)->query();
+                    if($data["msg"]){
+                        $insertData["create_time"] = $insertData["update_time"] = time();
+                        $insertData["from_userid"] = $data["from_uid"];
+                        $insertData["to_userid"] = $data["to_uid"];
+                        $insertData["msg"] = $data["msg"];
+                        $insertData["msg_type"] = $data["msgtype"];
+                        $insertData["flag"] = $data["flag"];
+                        $insert_id = $db->insert('cmf_chat')->cols($insertData)->query();
+                    }
 
                     if(isset($worker->uidConnections[$data['to_uid']])) {
                         $connection = $worker->uidConnections[$data['to_uid']];
-                        return $connection->send(json_encode(getChatInfo($insert_id)));
+                        return $connection->send(json_encode(array_merge(getChatInfo($insert_id) , ['type'=>'chat'])));
                     }
                     break;
             }
@@ -122,7 +124,8 @@ class Workerman extends Command
                             cmf_userinfos.flag as userfalg,
                             cmf_chat.flag,
                             cmf_chat.msg,
-                            msg_type
+                            msg_type,
+                            cmf_chat.from_userid as userid
                             ")
                 ->from('cmf_chat')
                 ->innerJoin('cmf_userinfos','cmf_userinfos.id = cmf_chat.from_userid')

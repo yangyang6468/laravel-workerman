@@ -6,6 +6,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
+
+    protected $table = 'cmf_userinfos';
+
     /**
      * The attributes that are mass assignable.
      *

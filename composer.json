@@ -8,7 +8,8 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "workerman/workerman": "^3.5",
-        "workerman/mysql": "^1.0"
+        "workerman/mysql": "^1.0",
+        "guzzlehttp/guzzle": "^6.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
@@ -21,6 +22,10 @@
         "classmap": [
             "database"
         ],
+        "files":[
+            "app/Helper/functions.php"
+        ],
+
         "psr-4": {
             "App\\": "app/"
         }
